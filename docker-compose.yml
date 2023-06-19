@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  node:
+    restart: always
+    build: ./visor-api/.
+    ports:
+      - "3005:3005"
+    volumes:
+      - ./visor-api/:/code
+
+  mongo:
+    image: mongo
+    ports: 
+      - "27018:27017"
+    volumes:
+      - mongodb:/data/db
+
+volumes:
+  mongodb:
