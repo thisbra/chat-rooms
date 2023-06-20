@@ -2,15 +2,23 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { useRouter } from "next/navigation";
+
 
 export default function Page() {
 
     const [username, setUsername] = useState('')
     const [room, setRoom] = useState('')
 
+    const router = useRouter()
+
+
     const handleForm = (e) => {
         e.preventDefault()
-        console.log(username)
+
+        if (username && room) {
+            router.push(`/chat/${room}?username=${username}`)
+        }
     }
 
    
@@ -33,7 +41,7 @@ export default function Page() {
                     </div>
 
                     <div className='mt-8'>
-                        <form action={handleForm}>
+                        <form onSubmit={handleForm}>
                             <div>
                                 <label 
                                     htmlFor='username'
