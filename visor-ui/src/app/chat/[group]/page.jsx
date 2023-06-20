@@ -124,6 +124,11 @@ export default function Page() {
                             placeholder='Type a message...'
                             value={chatinput}
                             onChange={(e) => setChatInput(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  handleSend();
+                                }
+                              }}
                             className='input-field col-span-11 ml-3'
                             /> 
                         <button
