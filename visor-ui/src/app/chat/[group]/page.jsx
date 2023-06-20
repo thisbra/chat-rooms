@@ -75,7 +75,7 @@ export default function Page() {
                         src="/visor_blue.svg" 
                         width={50} 
                         height={50}
-                        className=''
+                        className='visor-logo'
                         alt='visorai logo'
                         >
                         </Image>

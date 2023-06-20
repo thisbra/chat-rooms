@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useRouter } from "next/navigation";
 
 
+
 export default function Page() {
 
     const [username, setUsername] = useState('')
@@ -25,13 +26,15 @@ export default function Page() {
     return (
         <div className='page-container'>
             <div className='flex item-center justify-center'>
-                <Image 
-                    src="/visor_blue.svg" 
-                    width={50} 
-                    height={50}
-                    className='mt-40'
-                    >
-                    </Image>
+                <a target='_blank' href='https://visor.ai'>
+                    <Image 
+                        src="/visor_blue.svg" 
+                        width={70} 
+                        height={70}
+                        className='mt-40 visor-logo'
+                        >
+                        </Image>
+                </a>
 
             </div>
             <div className='flex item-center justify-center'>
