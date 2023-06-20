@@ -36,7 +36,7 @@ export default function Page() {
             </div>
             <div className='flex item-center justify-center'>
                 <div className='card-container mt-16 flex flex-col items-center'>
-                    <div className='text-xl mt-4'>
+                    <div className='text-xl mt-5 font-bold'>
                         Join a chat room
                     </div>
 
@@ -45,7 +45,7 @@ export default function Page() {
                             <div>
                                 <label 
                                     htmlFor='username'
-                                    className='mr-5' 
+                                    className='mr-6' 
                                     >Username:</label> 
                                 <input
                                     type='text'
@@ -53,7 +53,7 @@ export default function Page() {
                                     required
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
-                                    className='input-field'
+                                    className='input-field w-50'
                                     /> 
                             </div>
                             
@@ -68,7 +68,7 @@ export default function Page() {
                                     required
                                     value={room}
                                     onChange={(e) => setRoom(e.target.value)}
-                                    className='input-field'
+                                    className='input-field w-50'
                                     /> 
                             </div>
 
@@ -76,7 +76,7 @@ export default function Page() {
                             <div className='flex item-center justify-center mt-8'>
                                 <button
                                     type='submit'
-                                    className='button-main'
+                                    className='button-main font-bold'
                                     >Join</button>
                             </div>
 
