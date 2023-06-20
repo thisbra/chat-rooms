@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { v4 } from 'uuid'
 import io from 'socket.io-client'
@@ -11,12 +11,47 @@ const socket = io('http://localhost:3005')
 
 export default function Page() {
 
+    const [messageList, setMessageList] = useState([])
+
     const searchParams = useSearchParams()
     const usernameFromParams = searchParams.get('username')
     const [username, setUsername] = useState(usernameFromParams)
 
     const roomFromParams = usePathname().split('/')[2]
     const [room, setRoom] = useState(roomFromParams)
+
+    if (room != "") {
+        socket.emit('join_room', room)
+        console.log('joined room: ' + room)
+    }
+
+    const [chatinput, setChatInput] = useState('')
+
+    const handleSend = async () => {
+        if (chatinput) {
+            const messageContent = {
+                id: v4(),
+                author: username,
+                room: room,
+                message: chatinput,
+                timestamp: Date.now()
+            }
+
+            await socket.emit('send_message', messageContent)
+            setMessageList((list) => [...list, messageContent])
+            console.log(messageContent)
+            setChatInput('')
+        }
+    }
+
+    useEffect(() => {
+        socket.on('receive_message', (data) => {
+            console.log(data)
+            setMessageList((list) => [...list, data])
+            console.log(messageList)
+        })
+    }, [socket])
+
 
 
     return (
@@ -37,8 +72,41 @@ export default function Page() {
                 </div>
             </div>
             <div className='flex item-center justify-center'>
-                <div className='card-container mt-16 flex flex-col items-center'>
+                <div className='chat-container mt-10 flex flex-col items-center h-screen'>
                     
+                    <div className='flex-grow  w-full'>
+                        {messageList.map((message) => {
+                            return (
+                                <p key={message.id}>{message.message}</p>
+                            )
+                        }
+                        )}
+                    </div>
+
+                    <div className='flex w-full grid grid-cols-12 mb-3'>
+                        <input
+                            type='text'
+                            id='chatinput'
+                            placeholder='Type a message...'
+                            value={chatinput}
+                            onChange={(e) => setChatInput(e.target.value)}
+                            className='input-field col-span-11 ml-3'
+                            /> 
+                        <button
+                            className=''
+                            onClick={handleSend}
+                            >
+                                <Image 
+                                    src="/send_arrow.png" 
+                                    width={20} 
+                                    height={20}
+                                    className='ml-3'
+                                    alt='visorai logo'
+                                    >
+                                    </Image>
+                            </button>
+                        
+                    </div>
                 </div>
             </div>
         </div>
