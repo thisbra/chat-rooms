@@ -46,7 +46,13 @@
 .chat-container {
   background-color: #ffffff;
   height: 75vh;
-  width: 45rem;
+  width: 50rem;
   border-radius: 0.8rem;
+  padding-top: 1rem;
+}
+
+.message-container-overflow {
+  overflow-y: scroll;
+  height: calc(100vh - 200px);;
 }
 

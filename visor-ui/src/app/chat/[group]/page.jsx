@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { v4 } from 'uuid'
 import io from 'socket.io-client'
 import { useSearchParams, usePathname } from 'next/navigation'
+import Message from '@/components/Message'
 
 
 const socket = io('http://localhost:3005')
@@ -20,10 +21,21 @@ export default function Page() {
     const roomFromParams = usePathname().split('/')[2]
     const [room, setRoom] = useState(roomFromParams)
 
-    if (room != "") {
-        socket.emit('join_room', room)
-        console.log('joined room: ' + room)
-    }
+    useEffect(() => {
+        if (room !== '') {
+            socket.emit('join_room', room)
+            console.log('joined room: ' + room)
+            const messageContent = {
+                id: 'join' + v4(),
+                message: username + ' has joined the room',
+                timestamp: Date.now(),
+                room: room,
+                author: username
+            }
+            socket.emit('send_message', messageContent)
+            setMessageList((list) => [...list, messageContent])
+        }
+      }, [])
 
     const [chatinput, setChatInput] = useState('')
 
@@ -74,16 +86,38 @@ export default function Page() {
             <div className='flex item-center justify-center'>
                 <div className='chat-container mt-10 flex flex-col items-center h-screen'>
                     
-                    <div className='flex-grow  w-full'>
-                        {messageList.map((message) => {
-                            return (
-                                <p key={message.id}>{message.message}</p>
-                            )
+                    <div className='flex-grow  w-full message-container-overflow'>
+                        {messageList.map((message, index) => {
+
+                            
+                            if (message.id.includes('join')) {
+                                return (
+                                    <div className='text-center text-gray-400 mt-2 mb-2'>
+                                        {message.message}
+                                    </div>
+                                )
+                            } 
+                            else {
+
+                                return (
+                                    <Message
+                                    key={message.id}
+                                    isAuthor={message.author === username}
+                                    content={message.message}
+                                    author={
+                                        index = 0 ? message.author : (messageList[index - 1].author === message.author ? '' : message.author)
+                                    }
+                                    timestamp={message.timestamp}
+                                    />
+                                )
+
+                            }
+                        
                         }
                         )}
                     </div>
 
-                    <div className='flex w-full grid grid-cols-12 mb-3'>
+                    <div className='flex w-full grid grid-cols-12 mb-3 pt-2'>
                         <input
                             type='text'
                             id='chatinput'
