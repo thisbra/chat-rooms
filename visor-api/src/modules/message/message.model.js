@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const messageSchema = new mongoose.Schema({
-    id: {
+    messageId: {
       type: String,
       required: true
     },
