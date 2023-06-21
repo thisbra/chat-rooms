@@ -87,9 +87,19 @@ try {
 });
 
 // GET by ID Method for rooms
-router.get('/rooms/:roomId', async (req, res) => {
+router.get('/rooms/roomId/:roomId', async (req, res) => {
 try {
     const room = await Room.findOne({ id: req.params.roomId });
+    res.json(room);
+} catch (err) {
+    res.status(500).json({ message: err.message });
+}
+});
+
+// GET room by name Method for rooms
+router.get('/rooms/name/:name', async (req, res) => {
+try {
+    const room = await Room.findOne({ name: req.params.name });
     res.json(room);
 } catch (err) {
     res.status(500).json({ message: err.message });
