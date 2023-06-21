@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from "next/navigation";
-
+import axios from 'axios';
+import { v4 } from 'uuid';
 
 
 export default function Page() {
@@ -14,11 +15,21 @@ export default function Page() {
     const router = useRouter()
 
 
-    const handleForm = (e) => {
+    const handleForm = async (e) => {
         e.preventDefault()
 
         if (username && room) {
+            const userpath = process.env.NEXT_PUBLIC_API_URL + '/users/username/' + username
+            const userresponseGET = await axios.get(userpath)
+            if (userresponseGET.data === null) {
+                const userresponsePOST = await axios.post(process.env.NEXT_PUBLIC_API_URL + '/users', {
+                    userId: v4(),
+                    username: username,
+                })
+            }
+
             router.push(`/chat/${room}?username=${username}`)
+            
         }
     }
 
@@ -32,6 +43,7 @@ export default function Page() {
                         width={70} 
                         height={70}
                         className='mt-40 visor-logo'
+                        alt='Visor.ai logo'
                         >
                         </Image>
                 </a>
