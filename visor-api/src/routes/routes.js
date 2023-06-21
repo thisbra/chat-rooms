@@ -65,7 +65,7 @@ router.delete('/users/:userId', async (req, res) => {
 router.post('/rooms', async (req, res) => {
     try {
       const room = new Room({
-        id: req.body.roomId,
+        roomId: req.body.roomId,
         name: req.body.name,
         messageList: []
       });
@@ -120,7 +120,7 @@ try {
 router.post('/messages', async (req, res) => {
 try {
     const message = new Message({
-    id: req.body.messageId,
+    messagesId: req.body.messageId,
     content: req.body.content,
     timestamp: req.body.timestamp,
     author: req.body.author,
