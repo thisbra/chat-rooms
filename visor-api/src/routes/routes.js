@@ -31,9 +31,19 @@ router.get('/users', async (req, res) => {
 });
 
 // GET by ID Method
-router.get('/users/:userId', async (req, res) => {
+router.get('/users/userId/:userId', async (req, res) => {
     try {
         const user = await User.findOne({ userId: req.params.userId });
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// GET by username Method
+router.get('/users/username/:username', async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username });
         res.json(user);
     } catch (err) {
         res.status(500).json({ message: err.message });
