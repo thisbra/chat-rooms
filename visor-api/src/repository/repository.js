@@ -28,7 +28,19 @@ async function addMessage(data) {
     }
 }
 
+// Get all messages from a room
+async function getMessagesByRoomName(roomName) {
+    try {
+        const roomObj = await Room.findOne({ name: roomName });
+        const messageList = roomObj.messageList;
+        const messages = await Message.find({ messageId: { $in: messageList } });
+        return messages;
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 module.exports = {
-    addMessage
+    addMessage,
+    getMessagesByRoomName
 }
