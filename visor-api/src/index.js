@@ -7,6 +7,7 @@ const cors = require('cors');
 const { Server } = require('socket.io');
 const mongoString = process.env.MONGODB_URL;
 const routes = require('./routes/routes');
+const { addMessage } = require('./repository/repository');
 
 const PORT = 3005
 
@@ -47,6 +48,7 @@ io.on('connection', (socket) => {
 
     socket.on('send_message', (data) => {
         console.log(data);
+        addMessage(data);
         socket.to(data.room).emit("receive_message", data);
     });
 

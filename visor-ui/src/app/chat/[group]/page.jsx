@@ -29,7 +29,7 @@ export default function Page() {
 
             socket.emit('join_room', room)
             const messageContent = {
-                id: 'join' + v4(),
+                id: 'join' + v4().slice(4),
                 message: username + ' has joined the room',
                 timestamp: Date.now(),
                 room: room,
@@ -50,7 +50,7 @@ export default function Page() {
                         })
 
                         const roomCreatedMessageContent = {
-                            id: 'created' + v4(),
+                            id: 'created' + v4().slice(7),
                             message: 'Room ' + room + ' has been created!',
                             timestamp: Date.now(),
                             room: room,

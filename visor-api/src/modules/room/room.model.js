@@ -10,7 +10,7 @@ const roomSchema = new mongoose.Schema({
     required: true
   },
   messageList: {
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
+    type: [String],
     default: []
   }
 });
