@@ -5,6 +5,9 @@ const User = require('../modules/user/user.model');
 const Room = require('../modules/room/room.model');
 const Message = require('../modules/message/message.model');
 
+const { getMessagesByRoomName } = require('../repository/repository');
+
+
 // POST Method
 router.post('/users', async (req, res) => {
   const user = new User({
@@ -163,6 +166,15 @@ try {
 }
 });
 
+
+router.get('/messages/room/:room', async (req, res) => {
+    try {
+        const messages = await getMessagesByRoomName(req.params.room);
+        res.json(messages);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
 
 module.exports = router;
