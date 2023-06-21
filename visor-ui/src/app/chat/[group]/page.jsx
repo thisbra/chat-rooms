@@ -6,11 +6,14 @@ import { v4 } from 'uuid'
 import io from 'socket.io-client'
 import { useSearchParams, usePathname } from 'next/navigation'
 import Message from '@/components/Message'
+import axios from 'axios'
 
 
-const socket = io('http://localhost:3005')
+const socket = io(process.env.NEXT_PUBLIC_SOCK_URL)
 
 export default function Page() {
+
+    const [isLoading, setIsLoading] = useState(false)
 
     const [messageList, setMessageList] = useState([])
 
@@ -23,8 +26,8 @@ export default function Page() {
 
     useEffect(() => {
         if (room !== '') {
+
             socket.emit('join_room', room)
-            console.log('joined room: ' + room)
             const messageContent = {
                 id: 'join' + v4(),
                 message: username + ' has joined the room',
@@ -32,8 +35,39 @@ export default function Page() {
                 room: room,
                 author: username
             }
-            socket.emit('send_message', messageContent)
-            setMessageList((list) => [...list, messageContent])
+
+            const fetchRoom = async () => {
+                try {
+                    const roompath = process.env.NEXT_PUBLIC_API_URL + '/rooms/name/' + room
+                    console.log(roompath)
+                    const roomresponseGET = await axios.get(roompath)
+                    console.log(roomresponseGET)
+                    if (roomresponseGET.data === null) {
+                        console.log('room does not exist')
+                        const roomresponsePOST = await axios.post(process.env.NEXT_PUBLIC_API_URL + '/rooms', {
+                            roomId: v4(),
+                            name: room,
+                        })
+
+                        const roomCreatedMessageContent = {
+                            id: 'created' + v4(),
+                            message: 'Room ' + room + ' has been created!',
+                            timestamp: Date.now(),
+                            room: room,
+                            author: username
+                        }
+                        socket.emit('send_message', roomCreatedMessageContent)
+                        setMessageList((list) => [...list, roomCreatedMessageContent])
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+
+                socket.emit('send_message', messageContent)
+                setMessageList((list) => [...list, messageContent])
+            }
+            fetchRoom()
+
         }
       }, [])
 
@@ -65,7 +99,12 @@ export default function Page() {
     }, [socket])
 
 
+    if (isLoading) {
+        <div>Loading...</div>
+    }
 
+
+    if (!isLoading) {
     return (
         <div className='page-container'>
             <div className='flex item-center justify-center'>
@@ -90,7 +129,7 @@ export default function Page() {
                         {messageList.map((message, index) => {
 
                             
-                            if (message.id.includes('join')) {
+                            if (message.id.includes('join') || message.id.includes('created')) {
                                 return (
                                     <div className='text-center text-gray-400 mt-2 mb-2'>
                                         {message.message}
@@ -151,5 +190,6 @@ export default function Page() {
         </div>
     )
   
+}
 }
 
