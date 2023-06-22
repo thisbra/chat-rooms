@@ -14,7 +14,7 @@ const socket = io(process.env.NEXT_PUBLIC_SOCK_URL)
 
 export default function Page() {
 
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const chatBoxRef = useRef(null)
 
     const [messageList, setMessageList] = useState([])
@@ -83,6 +83,7 @@ export default function Page() {
             }
             fetchRoom()
 
+            setIsLoading(false)
         }
       }, [])
 
@@ -119,7 +120,17 @@ export default function Page() {
 
 
     if (isLoading) {
-        <div>Loading...</div>
+        return (
+            <div className='page-container flex items-center justify-center'>
+                <img 
+                    src='/visor_blue.svg'
+                    alt='visorai logo'
+                    height={70}
+                    width={70}
+                    className='visor-loader'
+                    ></img>
+            </div>
+        )
     }
 
 
@@ -136,7 +147,7 @@ export default function Page() {
                         src="/visor_blue.svg" 
                         width={50} 
                         height={50}
-                        className='visor-logo'
+                        className='visor-logo '
                         alt='visorai logo'
                         >
                         </Image>
