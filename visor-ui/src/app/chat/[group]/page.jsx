@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { v4 } from 'uuid'
 import io from 'socket.io-client'
@@ -14,6 +14,7 @@ const socket = io(process.env.NEXT_PUBLIC_SOCK_URL)
 export default function Page() {
 
     const [isLoading, setIsLoading] = useState(false)
+    const chatBoxRef = useRef(null)
 
     const [messageList, setMessageList] = useState([])
 
@@ -75,7 +76,7 @@ export default function Page() {
                 } catch (error) {
                     console.log(error)
                 }
-
+                
                 socket.emit('send_message', messageContent)
                 setMessageList((list) => [...list, messageContent])
             }
@@ -107,6 +108,13 @@ export default function Page() {
             setMessageList((list) => [...list, data])
         })
     }, [socket])
+
+    useEffect(() => {
+        if (chatBoxRef.current) {
+            chatBoxRef.current.scrollIntoView({ behavior: 'smooth'})
+        }
+    }, [messageList])
+
 
 
     if (isLoading) {
@@ -163,6 +171,7 @@ export default function Page() {
                         
                         }
                         )}
+                        <div ref={chatBoxRef}></div>
                     </div>
 
                     <div className='flex w-full grid grid-cols-12 mb-3 pt-2'>
