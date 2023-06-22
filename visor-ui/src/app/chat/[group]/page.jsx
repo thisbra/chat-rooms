@@ -7,6 +7,7 @@ import io from 'socket.io-client'
 import { useSearchParams, usePathname } from 'next/navigation'
 import Message from '@/components/Message'
 import axios from 'axios'
+import ReturnButton from '@/components/ReturnButton'
 
 
 const socket = io(process.env.NEXT_PUBLIC_SOCK_URL)
@@ -125,8 +126,11 @@ export default function Page() {
     if (!isLoading) {
     return (
         <div className='page-container'>
+            
+            <ReturnButton value={"Back to home"} />
+            
             <div className='flex item-center justify-center'>
-                <div className='flex text-2xl font-bold mt-12' style={{color: '#85C1B7'}}>    
+                <div className='flex text-2xl font-bold mt-10' style={{color: '#85C1B7'}}>    
                     Welc
                     <Image 
                         src="/visor_blue.svg" 
@@ -141,7 +145,7 @@ export default function Page() {
                 </div>
             </div>
             <div className='flex item-center justify-center'>
-                <div className='chat-container mt-10 flex flex-col items-center h-screen'>
+                <div className='chat-container mt-8 flex flex-col items-center h-screen'>
                     
                     <div className='flex-grow  w-full message-container-overflow'>
                         {messageList.map((message, index) => {
