@@ -11,12 +11,31 @@ export default function Page() {
 
     const [username, setUsername] = useState('')
     const [room, setRoom] = useState('')
+    const [invalidUsername, setInvalidUsername] = useState(false)
+    const [invalidRoom, setInvalidRoom] = useState(false)
 
     const router = useRouter()
 
 
     const handleForm = async (e) => {
         e.preventDefault()
+
+
+        const isValid = /^[a-zA-Z0-9-_]+$/;
+
+        if (!isValid.test(username)) {
+            setInvalidUsername(true)
+            return
+        } else {
+            setInvalidUsername(false)
+        }
+
+        if (!isValid.test(room)) {
+            setInvalidRoom(true)
+            return
+        } else {
+            setInvalidRoom(false)
+        }
 
         if (username && room) {
             const userpath = process.env.NEXT_PUBLIC_API_URL + '/users/username/' + username
@@ -67,8 +86,10 @@ export default function Page() {
                                     id='username'
                                     required
                                     value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
+                                    maxLength={15}
+                                    onChange={(e) => setUsername(e.target.value.trim())}
                                     className='input-field w-50'
+                                    style={{borderColor: invalidUsername ? 'red' : ''}}
                                     /> 
                             </div>
                             
@@ -82,8 +103,10 @@ export default function Page() {
                                     id='room'
                                     required
                                     value={room}
-                                    onChange={(e) => setRoom(e.target.value)}
+                                    maxLength={15}
+                                    onChange={(e) => setRoom(e.target.value.trim())}
                                     className='input-field w-50'
+                                    style={{borderColor: invalidRoom ? 'red' : ''}}
                                     /> 
                             </div>
 
