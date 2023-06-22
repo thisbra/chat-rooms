@@ -39,11 +39,8 @@ export default function Page() {
             const fetchRoom = async () => {
                 try {
                     const roompath = process.env.NEXT_PUBLIC_API_URL + '/rooms/name/' + room
-                    console.log(roompath)
                     const roomresponseGET = await axios.get(roompath)
-                    console.log(roomresponseGET)
                     if (roomresponseGET.data === null) {
-                        console.log('room does not exist')
                         const roomresponsePOST = await axios.post(process.env.NEXT_PUBLIC_API_URL + '/rooms', {
                             roomId: v4(),
                             name: room,
@@ -58,6 +55,22 @@ export default function Page() {
                         }
                         socket.emit('send_message', roomCreatedMessageContent)
                         setMessageList((list) => [...list, roomCreatedMessageContent])
+                    }
+
+                    if (roomresponseGET.data !== null) {
+                        const messagespath = process.env.NEXT_PUBLIC_API_URL + '/messages/room/' + room
+                        const messagesresponseGET = await axios.get(messagespath)
+                        const messageHistory = messagesresponseGET.data
+                        const msgList = []
+                        messageHistory.forEach(message => {
+                            delete message._id
+                            delete message.__v
+                            message.id = message.messageId
+                            message.message = message.content
+                            msgList.push(message)
+                        })
+                        
+                        setMessageList(msgList)
                     }
                 } catch (error) {
                     console.log(error)
@@ -85,16 +98,13 @@ export default function Page() {
 
             await socket.emit('send_message', messageContent)
             setMessageList((list) => [...list, messageContent])
-            console.log(messageContent)
             setChatInput('')
         }
     }
 
     useEffect(() => {
         socket.on('receive_message', (data) => {
-            console.log(data)
             setMessageList((list) => [...list, data])
-            console.log(messageList)
         })
     }, [socket])
 
@@ -128,10 +138,9 @@ export default function Page() {
                     <div className='flex-grow  w-full message-container-overflow'>
                         {messageList.map((message, index) => {
 
-                            
                             if (message.id.includes('join') || message.id.includes('created')) {
                                 return (
-                                    <div className='text-center text-gray-400 mt-2 mb-2'>
+                                    <div className='text-center text-gray-400 mt-2 mb-2' key={index}>
                                         {message.message}
                                     </div>
                                 )
