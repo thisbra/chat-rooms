@@ -4,6 +4,7 @@ services:
   node:
     restart: always
     build: ./visor-api/.
+    container_name: visor-api
     ports:
       - "3005:3005"
     volumes:
@@ -11,10 +12,18 @@ services:
 
   mongo:
     image: mongo
+    container_name: visor-mongo
     ports: 
       - "27018:27017"
     volumes:
       - mongodb:/data/db
+
+  ui:
+    restart: always
+    container_name: visor-ui
+    build: ./visor-ui/.
+    ports:
+      - "3000:3000"
 
 volumes:
   mongodb:
