@@ -5,10 +5,10 @@
     <img src="visor-ui/public/visor_blue.svg" alt="Logo" width="120" height="80">
     </a>
 
-  <h2 align="center">Visor Chat</h2>
+  <h2 align="center">Chat rooms</h2>
 
   <p align="center">
-    Live room chat application for Visor.ai web code challenge
+    Live chat room full-stack application.
     <br />
     <br />
     <br />
@@ -17,8 +17,8 @@
 
 
 ### Description
-Visor Chat is a full stack web application using **Socket.io** to handle messaging, **React**, **Next.Js**, **TailwindCSS** and **Axios** for front-end with **NodeJs**, **Express** and **Mongoose** for the REST API. Messages are persisted and can be seen later because of a NoSQL **MongoDB** database.
-Through Visor Chat you can message your friends and strangers that join the same room as you, as long as they are running the app on the same private network. To run the application its simple with **Docker compose**, just follow the instructions below. 
+Chat rooms is a full stack web application using **Socket.io** to handle messaging, **React**, **Next.Js**, **TailwindCSS** and **Axios** for front-end with **NodeJs**, **Express** and **Mongoose** for the REST API. Messages are persisted and can be seen later because of a NoSQL **MongoDB** database.
+Through Chat rooms you can message your friends and strangers that join the same room as you, as long as you are on the same private network. To run the application its simple with **Docker compose**, just follow the instructions below. 
 
 
 ### Running the app
@@ -38,10 +38,10 @@ And wait for the build to finish. It should take around 20 seconds.
 docker compose up
 ``` 
 This command will start the visor-ui, visor-api and visor-mongo containers that will be available on your machine's ports `3000`, `3005` and `27018` respectively.
-Now just open your browser of choice and go to http://localhost:3000/ to use Visor Chat!
+Now just open your browser of choice and go to http://localhost:3000/ to use Chat rooms!
 ![visor chat home](.github/homeprint.png)
 
-Messaging apps only work with friends, but if you don't any ( 😢 ) you can just open other browser tabs and try it out. 
+Messaging apps only work with friends, but if you don't have any ( 😢 ) you can just open other browser tabs and try it out. 
 ![visor chat print](.github/chatprint.png)
 
 ### Details
